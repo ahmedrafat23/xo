@@ -20,10 +20,30 @@ body {
     font-size: 2.5em;
     line-height: 100px;
     cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.cell.x {
+    color: #2e86de;
+    /* أزرق لـ X */
+    font-weight: bold;
+}
+
+.cell.o {
+    color: #e74c3c;
+    /* أحمر لـ O */
+    font-weight: bold;
 }
 
 button {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
+    cursor: pointer;
+}
+
+#status {
+    font-size: 1.2em;
+    margin-top: 10px;
 }

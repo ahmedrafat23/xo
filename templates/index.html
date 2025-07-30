@@ -51,14 +51,13 @@
         function aiMove() {
             if (!gameActive) return;
 
-            // اجمع كل الخانات الفارغة
             let emptyIndices = board.map((val, i) => val === '' ? i : null).filter(i => i !== null);
             if (emptyIndices.length === 0) return;
 
-            // اختر خانة عشوائية
             let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
             board[randomIndex] = ai;
             cells[randomIndex].textContent = ai;
+            cells[randomIndex].classList.add(ai.toLowerCase());
 
             if (!checkWinner()) {
                 statusText.textContent = `Player ${player}'s turn`;
@@ -71,10 +70,11 @@
 
             board[index] = player;
             e.target.textContent = player;
+            e.target.classList.add(player.toLowerCase());
 
             if (!checkWinner()) {
                 statusText.textContent = `Player ${ai}'s turn...`;
-                setTimeout(aiMove, 500); // الكمبيوتر يلعب بعد نصف ثانية
+                setTimeout(aiMove, 500);
             }
         }
 
@@ -82,7 +82,10 @@
             board = ['', '', '', '', '', '', '', '', ''];
             gameActive = true;
             statusText.textContent = `Player ${player}'s turn`;
-            cells.forEach(cell => cell.textContent = '');
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('x', 'o');
+            });
         }
 
         cells.forEach(cell => {
