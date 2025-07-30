@@ -34,11 +34,9 @@ A simple, interactive Tic-Tac-Toe (XO) game built using **Flask** for the backen
 ## 📁 Project Structure
 
 xo_game/
+├── app.py               # Main Flask application
+├── README.md            # Project documentation
 ├── static/
-│   └── style.css
-├── templates/
-│   └── index.html
-├── app.py
-└── README.md
-
-
+│   └── style.css        # CSS styling for the game interface
+└── templates/
+    └── index.html       # HTML template rendered by Flask
