@@ -33,3 +33,12 @@ A simple, interactive Tic-Tac-Toe (XO) game built using **Flask** for the backen
 
 ## 📁 Project Structure
 
+xo_game/
+├── static/
+│   └── style.css
+├── templates/
+│   └── index.html
+├── app.py
+└── README.md
+
+
