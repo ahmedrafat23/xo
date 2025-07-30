@@ -3,14 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>XO Game</title>
+    <title>XO Game – Player vs AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <h1>XO Game</h1>
     <div id="board">
-        <!-- 9 خلايا -->
         {% for i in range(9) %}
         <div class="cell" data-index="{{ i }}"></div>
         {% endfor %}
@@ -20,52 +19,69 @@
 
     <script>
         let board = ['', '', '', '', '', '', '', '', ''];
-        let currentPlayer = 'X';
         let gameActive = true;
-
+        let player = 'X';
+        let ai = 'O';
         const statusText = document.getElementById('status');
         const cells = document.querySelectorAll('.cell');
 
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
         function checkWinner() {
-            const winPatterns = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                [0, 4, 8], [2, 4, 6]
-            ];
             for (let pattern of winPatterns) {
                 const [a, b, c] = pattern;
                 if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    statusText.textContent = `Player ${board[a]} wins!`;
                     gameActive = false;
+                    statusText.textContent = `Player ${board[a]} wins!`;
+                    return true;
                 }
             }
-
             if (!board.includes('') && gameActive) {
                 statusText.textContent = "It's a draw!";
                 gameActive = false;
+                return true;
+            }
+            return false;
+        }
+
+        function aiMove() {
+            if (!gameActive) return;
+
+            // اجمع كل الخانات الفارغة
+            let emptyIndices = board.map((val, i) => val === '' ? i : null).filter(i => i !== null);
+            if (emptyIndices.length === 0) return;
+
+            // اختر خانة عشوائية
+            let randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+            board[randomIndex] = ai;
+            cells[randomIndex].textContent = ai;
+
+            if (!checkWinner()) {
+                statusText.textContent = `Player ${player}'s turn`;
             }
         }
 
         function handleClick(e) {
             const index = e.target.dataset.index;
-            if (board[index] || !gameActive) return;
+            if (!gameActive || board[index]) return;
 
-            board[index] = currentPlayer;
-            e.target.textContent = currentPlayer;
+            board[index] = player;
+            e.target.textContent = player;
 
-            checkWinner();
-
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            if (gameActive) {
-                statusText.textContent = `Player ${currentPlayer}'s turn`;
+            if (!checkWinner()) {
+                statusText.textContent = `Player ${ai}'s turn...`;
+                setTimeout(aiMove, 500); // الكمبيوتر يلعب بعد نصف ثانية
             }
         }
 
         function resetGame() {
             board = ['', '', '', '', '', '', '', '', ''];
-            currentPlayer = 'X';
             gameActive = true;
-            statusText.textContent = `Player X's turn`;
+            statusText.textContent = `Player ${player}'s turn`;
             cells.forEach(cell => cell.textContent = '');
         }
 
